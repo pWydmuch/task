@@ -1,4 +1,4 @@
-package org.example.task;
+package org.wydmuch.task;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
