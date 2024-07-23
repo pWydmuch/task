@@ -2,7 +2,6 @@ package org.wydmuch.task;
 
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -47,17 +46,15 @@ public class RepoIT {
     }
 
     @Test
-    @Disabled
     public void givenUsernameOFNonExistingUserAndJsonAcceptHeaderReturn404ErrorMessage() throws Exception {
         mockMvc.perform(get(BASE_URL + NON_EXISTING_USER).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(HttpStatus.NOT_FOUND.value()))
-                .andExpect(jsonPath("$.message").value("User not found"));
+                .andExpect(jsonPath("$.message").value("User " + NON_EXISTING_USER + " not found"));
     }
 
     @Test
-    @Disabled
     public void givenUsernameOFNonExistingUserAndXmlAcceptHeaderReturn406ErrorMessage() throws Exception {
         mockMvc.perform(get(BASE_URL + NON_EXISTING_USER).accept(MediaType.APPLICATION_XML))
                 .andExpect(status().isNotAcceptable())

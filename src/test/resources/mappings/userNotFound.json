@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathTemplate": "/users/{username}/repos",
+    "pathParameters": {
+      "username": {
+        "equalTo": "I_DO_NOT_EXIST"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "message": "Not Found",
+      "documentation_url": "https://docs.github.com/rest/repos/repos#list-repositories-for-a-user",
+      "status": "404"
+    }
+  }
+}
