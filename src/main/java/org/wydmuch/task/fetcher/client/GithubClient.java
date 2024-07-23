@@ -1,4 +1,4 @@
-package org.wydmuch.task.repo.client;
+package org.wydmuch.task.fetcher.client;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.service.annotation.GetExchange;
@@ -12,5 +12,5 @@ public interface GithubClient {
     List<Repo> getReposForUser(@PathVariable String username);
 
     @GetExchange("/repos/{username}/{repo}/branches")
-    List<Branch> getBranchesInRepo(@PathVariable String username, @PathVariable String repo);
+    List<Branch> getBranchesOfRepo(@PathVariable String username, @PathVariable String repo);
 }

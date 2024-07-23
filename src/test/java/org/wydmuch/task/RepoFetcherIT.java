@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WireMockTest(httpPort = 8081)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class RepoIT {
+public class RepoFetcherIT {
 
     private static final String URL_TEMPLATE = "/github/users/{username}/repos";
     private static final String EXISTING_USER = "pWydmuch";
@@ -41,6 +41,14 @@ public class RepoIT {
                 .andExpect(jsonPath("$[1].branches[2].name").value("3.0.B"))
                 .andExpect(jsonPath("$[1].branches[2].last_commit_sha").value("bb33"));
     }
+
+    @Test
+    public void givenUsernameOfExistingUserAndNoAcceptHeaderReturnNonForkReposOfTheUser() throws Exception {
+        mockMvc.perform(get(URL_TEMPLATE, EXISTING_USER))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()").value(2));
+   }
 
     @Test
     public void givenUsernameOfExistingUserAndXmlAcceptHeaderReturn406ErrorMessage() throws Exception {

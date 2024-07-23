@@ -1,1 +1,1 @@
-rootProject.name = "task"
+rootProject.name = "repo-fetcher"

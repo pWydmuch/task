@@ -1,4 +1,4 @@
-package org.wydmuch.task.repo.response;
+package org.wydmuch.task.fetcher.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

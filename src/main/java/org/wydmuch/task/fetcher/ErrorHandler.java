@@ -1,4 +1,4 @@
-package org.wydmuch.task.repo;
+package org.wydmuch.task.fetcher;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.wydmuch.task.repo.response.ErrorMsgResponse;
+import org.wydmuch.task.fetcher.response.ErrorMsgResponse;
 
 @ControllerAdvice
 public class ErrorHandler {

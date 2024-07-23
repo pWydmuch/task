@@ -1,4 +1,4 @@
-package org.wydmuch.task.repo.client;
+package org.wydmuch.task.fetcher.client;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -9,13 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
-import org.wydmuch.task.repo.UserNotFoundException;
+import org.wydmuch.task.fetcher.UserNotFoundException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Configuration
-public class Config {
+public class GithubClientConfig {
     private static final Pattern USERNAME_EXTRACTOR = Pattern.compile("/users/([^/]+)/");
 
     @Bean
