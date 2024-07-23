@@ -15,6 +15,6 @@ public class RepoFetcher {
     }
 
     public List<Repo> retrieveReposForUser(String username) {
-       return githubClient.getRepos(username);
+       return githubClient.getReposForUser(username).stream().filter(x -> !x.isForked()).toList();
    }
 }

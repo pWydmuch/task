@@ -21,12 +21,13 @@ public class RepoIT {
     private static final String BASE_URL = "/github/";
     private static final String EXISTING_USER = "pWydmuch";
     private static final String NON_EXISTING_USER = "I_DO_NOT_EXIST";
+    private static final String UNSUPPORTED_MEDIA_MSG = "Unsupported media type, please use JSON instead";
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void givenUsernameOfExistingUserAndJsonAcceptHeaderReturnReposOfTheUser() throws Exception {
+    public void givenUsernameOfExistingUserAndJsonAcceptHeaderReturnNoForkReposOfTheUser() throws Exception {
         mockMvc.perform(get(BASE_URL + EXISTING_USER).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -42,7 +43,7 @@ public class RepoIT {
                 .andExpect(status().isNotAcceptable())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(HttpStatus.NOT_ACCEPTABLE.value()))
-                .andExpect(jsonPath("$.message").value("Unsupported media type, please use JSON instead"));
+                .andExpect(jsonPath("$.message").value(UNSUPPORTED_MEDIA_MSG));
     }
 
     @Test
@@ -60,6 +61,6 @@ public class RepoIT {
                 .andExpect(status().isNotAcceptable())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(HttpStatus.NOT_ACCEPTABLE.value()))
-                .andExpect(jsonPath("$.message").value("Unsupported media type, please use JSON instead"));
+                .andExpect(jsonPath("$.message").value(UNSUPPORTED_MEDIA_MSG));
     }
 }
