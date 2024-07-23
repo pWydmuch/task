@@ -32,9 +32,14 @@ public class RepoIT {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].name").value("chess"))
-                .andExpect(jsonPath("$[0].owner.login").value(EXISTING_USER))
-                .andExpect(jsonPath("$[1].owner.login").value(EXISTING_USER));
+                .andExpect(jsonPath("$[0].repo_name").value("repoA"))
+                .andExpect(jsonPath("$[1].repo_name").value("repoB"))
+                .andExpect(jsonPath("$[0].owner_login").value(EXISTING_USER))
+                .andExpect(jsonPath("$[1].owner_login").value(EXISTING_USER))
+                .andExpect(jsonPath("$[0].branches[0].name").value("1.0.A"))
+                .andExpect(jsonPath("$[0].branches[0].last_commit_sha").value("aa11"))
+                .andExpect(jsonPath("$[1].branches[2].name").value("3.0.B"))
+                .andExpect(jsonPath("$[1].branches[2].last_commit_sha").value("bb33"));
     }
 
     @Test

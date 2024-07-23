@@ -16,7 +16,7 @@
     "jsonBody": [
       {
         "id": 772290249,
-        "name": "chess",
+        "name": "repoA",
         "private": false,
         "owner": {
           "login": "pWydmuch",
@@ -30,7 +30,7 @@
       },
       {
         "id": 182811553,
-        "name": "Converter",
+        "name": "repoB",
         "private": false,
         "owner": {
           "login": "pWydmuch",
@@ -44,7 +44,7 @@
       },
       {
         "id": 245476568,
-        "name": "ChessCodersCamp",
+        "name": "repoC",
         "private": false,
         "owner": {
           "login": "pWydmuch",

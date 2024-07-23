@@ -1,4 +1,4 @@
-package org.wydmuch.task;
+package org.wydmuch.task.repo;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -7,23 +7,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.wydmuch.task.model.ErrorMsg;
+import org.wydmuch.task.repo.response.ErrorMsgResponse;
 
 @ControllerAdvice
 public class ErrorHandler {
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-    public ResponseEntity<ErrorMsg> handleBadAcceptMediaType() {
+    public ResponseEntity<ErrorMsgResponse> handleBadAcceptMediaType() {
         HttpHeaders headers = createHeaderContentJson();
-        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_ACCEPTABLE.value(),
+        ErrorMsgResponse errorMsg = new ErrorMsgResponse(HttpStatus.NOT_ACCEPTABLE.value(),
                 "Unsupported media type, please use JSON instead");
         return new ResponseEntity<>(errorMsg, headers, HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorMsg> handleUserNotFoundException(UserNotFoundException ex) {
+    public ResponseEntity<ErrorMsgResponse> handleUserNotFoundException(UserNotFoundException ex) {
         HttpHeaders headers = createHeaderContentJson();
-        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_FOUND.value(),
+        ErrorMsgResponse errorMsg = new ErrorMsgResponse(HttpStatus.NOT_FOUND.value(),
                 "User " + ex.getUsername() + " not found");
         return new ResponseEntity<>(errorMsg, headers, HttpStatus.NOT_FOUND);
     }

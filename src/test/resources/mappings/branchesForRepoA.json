@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathTemplate": "/repos/{username}/{repo}/branches",
+    "pathParameters": {
+      "username": {
+        "equalTo": "pWydmuch"
+      },
+      "repo": {
+        "equalTo": "repoA"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": [
+      {
+        "name": "1.0.A",
+        "commit": {
+          "sha": "aa11"
+        }
+      },
+      {
+        "name": "2.0.A",
+        "commit": {
+          "sha": "aa22"
+        }
+      },
+      {
+        "name": "3.0.A",
+        "commit": {
+          "sha": "aa33"
+        }
+      }
+    ]
+  }
+}
