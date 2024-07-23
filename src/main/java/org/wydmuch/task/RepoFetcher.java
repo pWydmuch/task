@@ -1,8 +1,9 @@
 package org.wydmuch.task;
 
 import org.springframework.stereotype.Service;
+import org.wydmuch.task.model.Repo;
 
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class RepoFetcher {
@@ -13,7 +14,7 @@ public class RepoFetcher {
         this.githubClient = githubClient;
     }
 
-    public Set<Repo> retrieveReposForUser(String username) {
+    public List<Repo> retrieveReposForUser(String username) {
         return githubClient.getRepos(username);
     }
 }

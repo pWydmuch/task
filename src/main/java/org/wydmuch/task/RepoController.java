@@ -1,10 +1,15 @@
 package org.wydmuch.task;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.annotation.*;
+import org.wydmuch.task.model.NotAcceptableErrorMsg;
+import org.wydmuch.task.model.Repo;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 public class RepoController {
@@ -16,7 +21,14 @@ public class RepoController {
     }
 
     @GetMapping("/github/{username}")
-    public Set<Repo> github(@PathVariable String username) {
+    public List<Repo> github(@PathVariable String username) {
         return repoFetcher.retrieveReposForUser(username);
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+    public ResponseEntity<NotAcceptableErrorMsg> handleUserNotFoundException() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<>(new NotAcceptableErrorMsg(), headers, HttpStatus.NOT_ACCEPTABLE);
     }
 }
