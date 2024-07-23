@@ -16,7 +16,7 @@ public class ErrorHandler {
     public ResponseEntity<ErrorMsgResponse> handleBadAcceptMediaType() {
         HttpHeaders headers = createHeaderContentJson();
         ErrorMsgResponse errorMsg = new ErrorMsgResponse(HttpStatus.NOT_ACCEPTABLE.value(),
-                "Unsupported media type, please use JSON instead");
+                "Invalid expected response format, JSON is the only one supported");
         return new ResponseEntity<>(errorMsg, headers, HttpStatus.NOT_ACCEPTABLE);
     }
 

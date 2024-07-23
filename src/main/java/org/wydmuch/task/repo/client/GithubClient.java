@@ -12,5 +12,5 @@ public interface GithubClient {
     List<Repo> getReposForUser(@PathVariable String username);
 
     @GetExchange("/repos/{username}/{repo}/branches")
-    List<Branch> getBranchesForUserInRepo(@PathVariable String username, @PathVariable String repo);
+    List<Branch> getBranchesInRepo(@PathVariable String username, @PathVariable String repo);
 }

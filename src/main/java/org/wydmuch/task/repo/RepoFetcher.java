@@ -18,15 +18,16 @@ public class RepoFetcher {
     }
 
     public List<RepoResponse> retrieveReposForUser(String username) {
-       return githubClient.getReposForUser(username).stream()
-               .filter(repo -> !repo.isForked())
-               .map(this::createRepoResponse)
-               .toList();
-   }
+        return githubClient.getReposForUser(username).stream()
+                .filter(repo -> !repo.isForked())
+                .map(this::createRepoResponse)
+                .toList();
+    }
 
     private RepoResponse createRepoResponse(Repo repo) {
-        List<BranchResponse> branchesForUserInRepo = githubClient.getBranchesForUserInRepo(repo.owner().login(), repo.name()).stream()
-                .map(b -> new BranchResponse(b.name(),b.commit().sha())).toList();
-        return new RepoResponse(repo.name(), repo.owner().login(), branchesForUserInRepo);
+        List<BranchResponse> branches = githubClient.getBranchesInRepo(repo.owner().login(), repo.name()).stream()
+                .map(b -> new BranchResponse(b.name(), b.commit().sha()))
+                .toList();
+        return new RepoResponse(repo.name(), repo.owner().login(), branches);
     }
 }

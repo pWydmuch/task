@@ -17,7 +17,7 @@ public class RepoController {
         this.repoFetcher = repoFetcher;
     }
 
-    @GetMapping(value = "/github/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/github/users/{username}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RepoResponse> github(@PathVariable String username) {
         return repoFetcher.retrieveReposForUser(username);
     }

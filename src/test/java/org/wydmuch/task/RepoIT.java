@@ -18,17 +18,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class RepoIT {
 
-    private static final String BASE_URL = "/github/";
+    private static final String URL_TEMPLATE = "/github/users/{username}/repos";
     private static final String EXISTING_USER = "pWydmuch";
     private static final String NON_EXISTING_USER = "I_DO_NOT_EXIST";
-    private static final String UNSUPPORTED_MEDIA_MSG = "Unsupported media type, please use JSON instead";
+    private static final String UNSUPPORTED_MEDIA_MSG = "Invalid expected response format, JSON is the only one supported";
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void givenUsernameOfExistingUserAndJsonAcceptHeaderReturnNoForkReposOfTheUser() throws Exception {
-        mockMvc.perform(get(BASE_URL + EXISTING_USER).accept(MediaType.APPLICATION_JSON))
+    public void givenUsernameOfExistingUserAndJsonAcceptHeaderReturnNonForkReposOfTheUser() throws Exception {
+        mockMvc.perform(get(URL_TEMPLATE, EXISTING_USER).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(2))
@@ -44,7 +44,7 @@ public class RepoIT {
 
     @Test
     public void givenUsernameOfExistingUserAndXmlAcceptHeaderReturn406ErrorMessage() throws Exception {
-        mockMvc.perform(get(BASE_URL + EXISTING_USER).accept(MediaType.APPLICATION_XML))
+        mockMvc.perform(get(URL_TEMPLATE, EXISTING_USER).accept(MediaType.APPLICATION_XML))
                 .andExpect(status().isNotAcceptable())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(HttpStatus.NOT_ACCEPTABLE.value()))
@@ -53,7 +53,7 @@ public class RepoIT {
 
     @Test
     public void givenUsernameOFNonExistingUserAndJsonAcceptHeaderReturn404ErrorMessage() throws Exception {
-        mockMvc.perform(get(BASE_URL + NON_EXISTING_USER).accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(URL_TEMPLATE, NON_EXISTING_USER).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(HttpStatus.NOT_FOUND.value()))
@@ -62,7 +62,7 @@ public class RepoIT {
 
     @Test
     public void givenUsernameOFNonExistingUserAndXmlAcceptHeaderReturn406ErrorMessage() throws Exception {
-        mockMvc.perform(get(BASE_URL + NON_EXISTING_USER).accept(MediaType.APPLICATION_XML))
+        mockMvc.perform(get(URL_TEMPLATE, NON_EXISTING_USER).accept(MediaType.APPLICATION_XML))
                 .andExpect(status().isNotAcceptable())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value(HttpStatus.NOT_ACCEPTABLE.value()))
