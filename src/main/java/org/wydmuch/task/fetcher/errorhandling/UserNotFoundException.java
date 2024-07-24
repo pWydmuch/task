@@ -1,4 +1,4 @@
-package org.wydmuch.task.fetcher;
+package org.wydmuch.task.fetcher.errorhandling;
 
 public class UserNotFoundException extends RuntimeException {
     private final String username;

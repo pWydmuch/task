@@ -1,4 +1,4 @@
-package org.wydmuch.task.fetcher;
+package org.wydmuch.task.fetcher.errorhandling;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +26,14 @@ public class ErrorHandler {
         ErrorMsgResponse errorMsg = new ErrorMsgResponse(HttpStatus.NOT_FOUND.value(),
                 "User " + ex.getUsername() + " not found");
         return new ResponseEntity<>(errorMsg, headers, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    public ResponseEntity<ErrorMsgResponse> handleRateLimitExceededException() {
+        HttpHeaders headers = createHeaderContentJson();
+        ErrorMsgResponse errorMsg = new ErrorMsgResponse(HttpStatus.FORBIDDEN.value(),
+                "Rate limit exceeded, try to provide token");
+        return new ResponseEntity<>(errorMsg, headers, HttpStatus.FORBIDDEN);
     }
 
     private static HttpHeaders createHeaderContentJson() {

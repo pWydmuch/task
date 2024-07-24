@@ -6,11 +6,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
-import org.wydmuch.task.fetcher.UserNotFoundException;
+import org.wydmuch.task.fetcher.errorhandling.RateLimitExceededException;
+import org.wydmuch.task.fetcher.errorhandling.UserNotFoundException;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +27,10 @@ public class GithubClientConfig {
         RestClient restClient = RestClient.builder()
                 .defaultStatusHandler(x -> x.isSameCodeAs(HttpStatus.NOT_FOUND),
                         (req, res) -> throwExceptionIfUserNotFound(req))
+                .defaultStatusHandler(x -> x.isSameCodeAs(HttpStatus.FORBIDDEN),
+                        (req, res) -> {
+                            throw new RateLimitExceededException();
+                        })
                 .defaultHeaders(h -> addAuthorizationHeaderIfTokenNotNull(token, h))
                 .baseUrl(baseUrl)
                 .build();
@@ -31,6 +38,7 @@ public class GithubClientConfig {
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(exchangeAdapter).build();
         return factory.createClient(GithubClient.class);
     }
+
 
     private static void throwExceptionIfUserNotFound(HttpRequest req) {
         Matcher matcher = USERNAME_EXTRACTOR.matcher(req.getURI().toString());

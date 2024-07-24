@@ -2,7 +2,7 @@
 
 Retrieving repositories' information from github REST api
 
-## Table of Contents
+### Table of Contents
 
 - [Technologies Used](#technologies-used)
 - [Sidestepping Rate Limits](#sidestepping-rate-limits)
@@ -49,7 +49,7 @@ And then running container based on the image
 ```bash
 docker run -p 8080:8080 -e repo-fetcher
 ```
-Or to increase rate limits:
+Or to have higher rate limits:
 
 ```bash
 docker run -p 8080:8080 -e GITHUB_TOKEN=$GITHUB_TOKEN repo-fetcher
@@ -148,9 +148,21 @@ curl -H "Accept: application/xml" http://localhost:8080/github/users/$USER_LOGIN
   "status": 406,
   "message": "Invalid expected response format, JSON is the only one supported"
 }
-
 ```
 
+#### Rate Limited Exceeded Case
+
+You have to make this api call several times in order to cause rate limitation exception
+
+```bash
+curl -H "Accept: application/json" http://localhost:8080/github/users/$USER_LOGIN/repos |  jq .
+```
+```json
+{
+  "status": 403,
+  "message": "Rate limit exceeded, try to provide token"
+}
+```
 ### Api Documentation
 
 OpenApi documentation is accessible under the link below

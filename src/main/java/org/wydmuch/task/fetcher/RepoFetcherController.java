@@ -41,6 +41,14 @@ public class RepoFetcherController {
                                 "message": "Invalid expected response format, JSON is the only one supported"
                             }
                             """
+                    ))),
+                    @ApiResponse(description = "Not acceptable media type format", responseCode = "403", content = @Content(
+                            schema = @Schema(implementation = ErrorMsgResponse.class), examples = @ExampleObject("""
+                            {
+                                "status": 403,
+                                "message": "Rate limit exceeded, try to provide token"
+                            }
+                            """
                     )))
             })
     @GetMapping(value = "/github/users/{username}/repos", produces = MediaType.APPLICATION_JSON_VALUE)

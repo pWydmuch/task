@@ -76,4 +76,13 @@ public class RepoFetcherIT {
                 .andExpect(jsonPath("$.status").value(HttpStatus.NOT_ACCEPTABLE.value()))
                 .andExpect(jsonPath("$.message").value(UNSUPPORTED_MEDIA_MSG));
     }
+
+    @Test
+    public void givenApiRateExceeded403ErrorMessage() throws Exception {
+        mockMvc.perform(get(URL_TEMPLATE, "EXCEEDING_RATE_LIMITS").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status").value(HttpStatus.FORBIDDEN.value()))
+                .andExpect(jsonPath("$.message").value("Rate limit exceeded, try to provide token"));
+    }
 }
