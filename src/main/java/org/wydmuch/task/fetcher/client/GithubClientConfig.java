@@ -24,7 +24,14 @@ public class GithubClientConfig {
     @Bean
     public GithubClient githubClient(@Value("${github.api.baseurl}") String baseUrl,
                                      @Value("${github.api.token}") String token) {
-        RestClient restClient = RestClient.builder()
+        RestClient restClient = createRestClient(baseUrl, token);
+        RestClientAdapter exchangeAdapter = RestClientAdapter.create(restClient);
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(exchangeAdapter).build();
+        return factory.createClient(GithubClient.class);
+    }
+
+    private static RestClient createRestClient(String baseUrl, String token) {
+        return RestClient.builder()
                 .defaultStatusHandler(x -> x.isSameCodeAs(HttpStatus.NOT_FOUND),
                         (req, res) -> throwExceptionIfUserNotFound(req))
                 .defaultStatusHandler(x -> x.isSameCodeAs(HttpStatus.FORBIDDEN),
@@ -34,11 +41,7 @@ public class GithubClientConfig {
                 .defaultHeaders(h -> addAuthorizationHeaderIfTokenNotNull(token, h))
                 .baseUrl(baseUrl)
                 .build();
-        RestClientAdapter exchangeAdapter = RestClientAdapter.create(restClient);
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(exchangeAdapter).build();
-        return factory.createClient(GithubClient.class);
     }
-
 
     private static void throwExceptionIfUserNotFound(HttpRequest req) {
         Matcher matcher = USERNAME_EXTRACTOR.matcher(req.getURI().toString());
