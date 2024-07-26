@@ -34,9 +34,7 @@ public class GithubClientConfig {
                 .defaultStatusHandler(x -> x.isSameCodeAs(HttpStatus.NOT_FOUND),
                         GithubClientConfig::throwExceptionIfUserNotFound)
                 .defaultStatusHandler(x -> x.isSameCodeAs(HttpStatus.FORBIDDEN),
-                        __ -> {
-                            throw new RateLimitExceededException();
-                        })
+                        __ -> Mono.error(new RateLimitExceededException()))
                 .defaultHeaders(h -> addAuthorizationHeaderIfTokenNotNull(token, h))
                 .baseUrl(baseUrl)
                 .build();
