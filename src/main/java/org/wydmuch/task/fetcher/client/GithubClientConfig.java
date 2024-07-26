@@ -23,19 +23,19 @@ public class GithubClientConfig {
     @Bean
     public GithubClient githubClient(@Value("${github.api.baseurl}") String baseUrl,
                                      @Value("${github.api.token}") String token) {
-        WebClient webClient = createRestClient(baseUrl, token);
+        WebClient webClient = createWebClient(baseUrl, token);
         WebClientAdapter exchangeAdapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(exchangeAdapter).build();
         return factory.createClient(GithubClient.class);
     }
 
-    private static WebClient createRestClient(String baseUrl, String token) {
+    private static WebClient createWebClient(String baseUrl, String token) {
         return WebClient.builder()
                 .defaultStatusHandler(x -> x.isSameCodeAs(HttpStatus.NOT_FOUND),
                         GithubClientConfig::throwExceptionIfUserNotFound)
                 .defaultStatusHandler(x -> x.isSameCodeAs(HttpStatus.FORBIDDEN),
                         __ -> Mono.error(new RateLimitExceededException()))
-                .defaultHeaders(h -> addAuthorizationHeaderIfTokenNotNull(token, h))
+                .defaultHeaders(h -> addAuthorizationHeaderIfTokenPresent(token, h))
                 .baseUrl(baseUrl)
                 .build();
     }
@@ -46,7 +46,7 @@ public class GithubClientConfig {
         return  matcher.find() ? Mono.error(new UserNotFoundException(matcher.group(1))) : Mono.empty();
     }
 
-    private static void addAuthorizationHeaderIfTokenNotNull(String token, HttpHeaders h) {
+    private static void addAuthorizationHeaderIfTokenPresent(String token, HttpHeaders h) {
         if (token != null && !token.isBlank()) {
             h.add("Authorization", "Bearer " + token);
         }
