@@ -2,11 +2,11 @@ package org.wydmuch.task.fetcher;
 
 import org.springframework.stereotype.Service;
 import org.wydmuch.task.fetcher.client.GithubClient;
-import org.wydmuch.task.fetcher.response.BranchResponse;
 import org.wydmuch.task.fetcher.client.Repo;
+import org.wydmuch.task.fetcher.response.BranchResponse;
 import org.wydmuch.task.fetcher.response.RepoResponse;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class RepoFetcher {
@@ -17,17 +17,16 @@ public class RepoFetcher {
         this.githubClient = githubClient;
     }
 
-    public List<RepoResponse> retrieveNonForReposForUser(String username) {
-        return githubClient.getReposForUser(username).stream()
-                .filter(repo -> !repo.isForked())
-                .map(this::createRepoResponse)
-                .toList();
+    public Flux<RepoResponse> retrieveNonForReposForUser(String username) {
+        return githubClient.getReposForUser(username)
+                .filter(x -> !x.isForked())
+                .flatMap(this::createRepoResponse);
     }
 
-    private RepoResponse createRepoResponse(Repo repo) {
-        List<BranchResponse> branches = githubClient.getBranchesOfRepo(repo.owner().login(), repo.name()).stream()
+    private Mono<RepoResponse> createRepoResponse(Repo repo) {
+        return githubClient.getBranchesOfRepo(repo.owner().login(), repo.name())
                 .map(b -> new BranchResponse(b.name(), b.commit().sha()))
-                .toList();
-        return new RepoResponse(repo.name(), repo.owner().login(), branches);
+                .collectList()
+                .map(branches -> new RepoResponse(repo.name(), repo.owner().login(), branches));
     }
 }

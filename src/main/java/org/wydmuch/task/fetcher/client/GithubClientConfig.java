@@ -4,16 +4,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.support.RestClientAdapter;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.support.WebClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import org.wydmuch.task.fetcher.errorhandling.RateLimitExceededException;
 import org.wydmuch.task.fetcher.errorhandling.UserNotFoundException;
+import reactor.core.publisher.Mono;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,18 +23,18 @@ public class GithubClientConfig {
     @Bean
     public GithubClient githubClient(@Value("${github.api.baseurl}") String baseUrl,
                                      @Value("${github.api.token}") String token) {
-        RestClient restClient = createRestClient(baseUrl, token);
-        RestClientAdapter exchangeAdapter = RestClientAdapter.create(restClient);
+        WebClient webClient = createRestClient(baseUrl, token);
+        WebClientAdapter exchangeAdapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(exchangeAdapter).build();
         return factory.createClient(GithubClient.class);
     }
 
-    private static RestClient createRestClient(String baseUrl, String token) {
-        return RestClient.builder()
+    private static WebClient createRestClient(String baseUrl, String token) {
+        return WebClient.builder()
                 .defaultStatusHandler(x -> x.isSameCodeAs(HttpStatus.NOT_FOUND),
-                        (req, res) -> throwExceptionIfUserNotFound(req))
+                        GithubClientConfig::throwExceptionIfUserNotFound)
                 .defaultStatusHandler(x -> x.isSameCodeAs(HttpStatus.FORBIDDEN),
-                        (req, res) -> {
+                        __ -> {
                             throw new RateLimitExceededException();
                         })
                 .defaultHeaders(h -> addAuthorizationHeaderIfTokenNotNull(token, h))
@@ -43,11 +42,10 @@ public class GithubClientConfig {
                 .build();
     }
 
-    private static void throwExceptionIfUserNotFound(HttpRequest req) {
-        Matcher matcher = USERNAME_EXTRACTOR.matcher(req.getURI().toString());
-        if (matcher.find()) {
-            throw new UserNotFoundException(matcher.group(1));
-        }
+
+    private static Mono<? extends Throwable> throwExceptionIfUserNotFound(ClientResponse res) {
+        Matcher matcher = USERNAME_EXTRACTOR.matcher(res.request().getURI().toString());
+        return  matcher.find() ? Mono.error(new UserNotFoundException(matcher.group(1))) : Mono.empty();
     }
 
     private static void addAuthorizationHeaderIfTokenNotNull(String token, HttpHeaders h) {

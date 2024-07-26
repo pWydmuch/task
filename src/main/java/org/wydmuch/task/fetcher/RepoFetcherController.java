@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.wydmuch.task.fetcher.response.ErrorMsgResponse;
 import org.wydmuch.task.fetcher.response.RepoResponse;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class RepoFetcherController {
                     )))
             })
     @GetMapping(value = "/github/users/{username}/repos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<RepoResponse> retrieveNonForkRepos(@PathVariable String username) {
+    public Flux<RepoResponse> retrieveNonForkRepos(@PathVariable String username) {
         return repoFetcher.retrieveNonForReposForUser(username);
     }
 }
