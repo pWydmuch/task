@@ -23,7 +23,7 @@ public class GithubClientConfig {
 
     private static WebClient createWebClient(String baseUrl, String token) {
         return WebClient.builder()
-                .filter(ErrorHandler.exchangeFilter())
+                .filter(ErrorHandler.handleErrorsFilter())
                 .defaultHeaders(h -> addAuthorizationHeaderIfTokenPresent(token, h))
                 .baseUrl(baseUrl)
                 .build();

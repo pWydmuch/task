@@ -43,7 +43,7 @@ public class ErrorHandler {
         return new ResponseEntity<>(errorMsg, headers, HttpStatus.FORBIDDEN);
     }
 
-    public static ExchangeFilterFunction exchangeFilter() {
+    public static ExchangeFilterFunction handleErrorsFilter() {
         return ExchangeFilterFunction.ofResponseProcessor(res -> {
             if (res.statusCode().isSameCodeAs(HttpStatus.NOT_FOUND)) {
                 Matcher matcher = USERNAME_EXTRACTOR.matcher(res.request().getURI().toString());
