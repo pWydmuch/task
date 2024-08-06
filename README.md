@@ -66,56 +66,55 @@ curl -H "Accept: application/json" http://localhost:8080/github/users/$USER_LOGI
 With USER_LOGIN being pWydmuch, it should produce something along the lines of:
 
 ```json
-[
-  {
-    "repo_name": "chess",
-    "owner_login": "pWydmuch",
-    "branches": [
-      {
-        "name": "main",
-        "last_commit_sha": "5d285c552d6bef8279e7582f7c4943f9a4d6071c"
-      },
-      {
-        "name": "queen-diagonal",
-        "last_commit_sha": "eb355fc6c05a6c4938706a9ee7138e79f9acf746"
-      }
-    ]
-  },
-  {
-    "repo_name": "Converter",
-    "owner_login": "pWydmuch",
-    "branches": [
-      {
-        "name": "master",
-        "last_commit_sha": "450ce449b36c17123e1b283a4c5b56090653db3a"
-      }
-    ]
-  },
-  {
-    "repo_name": "docker-compose",
-    "owner_login": "pWydmuch",
-    "branches": [
-      {
-        "name": "master",
-        "last_commit_sha": "28279bceb4580c973796547727512e9d590e1ff9"
-      }
-    ]
-  },
-  {
-    "repo_name": "Minesweeper",
-    "owner_login": "pWydmuch",
-    "branches": [
-      {
-        "name": "master",
-        "last_commit_sha": "8f513fc1a788b65452d344e5cdfb445ab9586a2e"
-      },
-      {
-        "name": "maven",
-        "last_commit_sha": "689180e9ad8d8f6cb24df3e3d4a58336fcf758e7"
-      }
-    ]
-  }
-]
+{
+  "owner_login": "pWydmuch",
+  "repos": [
+    {
+      "repo_name": "chess",
+      "branches": [
+        {
+          "name": "main",
+          "last_commit_sha": "5d285c552d6bef8279e7582f7c4943f9a4d6071c"
+        },
+        {
+          "name": "queen-diagonal",
+          "last_commit_sha": "eb355fc6c05a6c4938706a9ee7138e79f9acf746"
+        }
+      ]
+    },
+    {
+      "repo_name": "Converter",
+      "branches": [
+        {
+          "name": "master",
+          "last_commit_sha": "450ce449b36c17123e1b283a4c5b56090653db3a"
+        }
+      ]
+    },
+    {
+      "repo_name": "docker-compose",
+      "branches": [
+        {
+          "name": "master",
+          "last_commit_sha": "28279bceb4580c973796547727512e9d590e1ff9"
+        }
+      ]
+    },
+    {
+      "repo_name": "Minesweeper",
+      "branches": [
+        {
+          "name": "master",
+          "last_commit_sha": "8f513fc1a788b65452d344e5cdfb445ab9586a2e"
+        },
+        {
+          "name": "maven",
+          "last_commit_sha": "689180e9ad8d8f6cb24df3e3d4a58336fcf758e7"
+        }
+      ]
+    }
+  ]
+}
 ```
 
 Alternatively, in case you don't have jq installed you can use python instead, the output would be a bit uglier though
