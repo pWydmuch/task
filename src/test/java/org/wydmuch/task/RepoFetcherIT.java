@@ -102,44 +102,46 @@ public class RepoFetcherIT {
 
     private static String happyPathResponse() {
         return """
-                     [
+                {
+                  "owner_login": "%s",
+                  "repos": [
+                    {
+                      "repo_name": "repoA",
+                      "branches": [
                         {
-                           "repo_name":"repoA",
-                           "owner_login":"%1$s",
-                           "branches":[
-                              {
-                                 "name":"1.0.A",
-                                 "last_commit_sha":"aa11"
-                              },
-                              {
-                                 "name":"2.0.A",
-                                 "last_commit_sha":"aa22"
-                              },
-                              {
-                                 "name":"3.0.A",
-                                 "last_commit_sha":"aa33"
-                              }
-                           ]
+                          "name": "1.0.A",
+                          "last_commit_sha": "aa11"
                         },
                         {
-                           "repo_name":"repoB",
-                           "owner_login":"%1$s",
-                           "branches":[
-                              {
-                                 "name":"1.0.B",
-                                 "last_commit_sha":"bb11"
-                              },
-                              {
-                                 "name":"2.0.B",
-                                 "last_commit_sha":"bb22"
-                              },
-                              {
-                                 "name":"3.0.B",
-                                 "last_commit_sha":"bb33"
-                              }
-                           ]
+                          "name": "2.0.A",
+                          "last_commit_sha": "aa22"
+                        },
+                        {
+                          "name": "3.0.A",
+                          "last_commit_sha": "aa33"
                         }
-                     ]
+                      ]
+                    },
+                    {
+                      "repo_name": "repoB",
+                      "branches": [
+                        {
+                          "name": "1.0.B",
+                          "last_commit_sha": "bb11"
+                        },
+                        {
+                          "name": "2.0.B",
+                          "last_commit_sha": "bb22"
+                        },
+                        {
+                          "name": "3.0.B",
+                          "last_commit_sha": "bb33"
+                        }
+                      ]
+                    }
+                  ]
+                }
+                
                 """.formatted(EXISTING_USER);
     }
 }
